@@ -39,6 +39,8 @@ def comprueba_identificacion():
 	usuario=sesion.usuario
 	return usuario
 
+def passwordOk(usuario):
+	return usuario +'3'
 
 
 ###############################################################
@@ -48,7 +50,8 @@ def comprueba_identificacion():
 ################ FORMULARIOS    ########################
 form_logear = form.Form(
 	form.Textbox("Usuario", form.notnull),
-	form.Password("Contrasenia", form.notnull)
+	form.Password("Contrasenia", form.notnull),
+	form.Button("Sign In")
 	)
 
 
@@ -83,15 +86,26 @@ class index:
 	def GET(self):
 		usuario = comprueba_identificacion()
 		if usuario:
-			#Hacer lo que tenga que hacer si el usuario está.
+			return "El chachi usuario esta por GET"
 		else:
-			f = form_logear()
-			return plantilla.formulario(form=f)
+			f = form_registrar()
+			return plantilla.formulario(form=f,usuario=usuario)
 	def POST(self):
-		#Lo dejo por aqui
+		f = form_registrar()
+		if not f.validates():
+			return plantilla.login(form=f,usuario='',mensaje='')
+		i = web.input()
+		usuario=i.username
+		password=u.password
+		if password == passwordOk(usuario):
+			sesion.usuario=usuario
+			return "El seeOther ese raro"
+		else:
+			form=login_form()
+			return plantilla.login(form=f,usuario='',mensaje='Password incorrecto')
 				
 		
-
+#Clase para registrarse en el sistema.
 
 class registro:
 	def GET(self):
