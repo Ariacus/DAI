@@ -39,8 +39,6 @@ def comprueba_identificacion():
 	usuario=sesion.usuario
 	return usuario
 
-def passwordOk(usuario):
-	return usuario +'3'
 
 
 ###############################################################
@@ -94,16 +92,7 @@ class index:
 		f = form_registrar()
 		if not f.validates():
 			return plantilla.login(form=f,usuario='',mensaje='')
-		i = web.input()
-		usuario=i.username
-		password=u.password
-		if password == passwordOk(usuario):
-			sesion.usuario=usuario
-			return "El seeOther ese raro"
-		else:
-			form=login_form()
-			return plantilla.login(form=f,usuario='',mensaje='Password incorrecto')
-				
+		#Continuar por aqui, dudas.		
 		
 #Clase para registrarse en el sistema.
 
