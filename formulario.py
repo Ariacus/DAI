@@ -1,10 +1,19 @@
 #!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
 
 import web
 from web import form
 from web.contrib.template import render_mako
+from pymongo import MongoClient
+
+
+client = MongoClient()
+db = client.aplicacion
+print "Se ha conectado a la BDD"
 web.config.debug=False
+
+
 
 
 urls = (
@@ -80,12 +89,27 @@ form_registrar = form.Form(
 
 ################# CLASES ############################################
 class inicio:
-	def GET(self):
+	def GET(self):		
+
 		return plantilla.inicio()
 	def POST(self):
-		return "Hola, estoy en el POST de inicio, no deberia hace nada"			
+		return "Inicio por POST"
+			
 
+#Clase para logear
 
+class login:
+	def GET(self):
+		f = form_logear()
+		return plantilla.login(f=f.render())
+	def POST(self):
+		f = form_logear()
+		posts=db.posts
+		query="Hola"
+		if query:
+			return "Ha encontrado"
+		else:
+			return "No ha encontrado nada"
 		
 		
 #Clase para registrarse en el sistema.
@@ -101,9 +125,30 @@ class registro:
 		f = form_registrar()
 		if not f.validates():
 			
-			return plantilla.formulario(form=f)
+			return plantilla.registro(f=f.render())
 		else:
-			return "Formulario practica 3 enviado correctamente"
+			usr = {"Nombre": f.d.Nombre,
+				"Password": f.d.Contrasenia,
+				"Apellidos": f.d.Apellidos,
+				"DNI": f.d.DNI,
+				"Email": f.d.email,
+				"VISA": f.d.VISA,
+				"dia": f.d.dia,
+				"mes": f.d.mes,
+				"anio": f.d.anio,
+				"Direccion": f.d.Direccion,
+				"Pago": f.d.pago}			
+			posts=db.posts
+			posts.insert(usr)
+			print "Se han registrado los datos"
+			return plantilla.inicio()
+	
+
+
+
+
+
+
 
 
 
