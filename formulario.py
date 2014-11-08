@@ -9,7 +9,8 @@ web.config.debug=False
 
 urls = (
 	'/registro', 'registro',
-	'/', 'index'
+	'/', 'inicio',
+	'/login','login'
  	
 )
 
@@ -78,30 +79,23 @@ form_registrar = form.Form(
 
 
 ################# CLASES ############################################
-
-
-class index:
+class inicio:
 	def GET(self):
-		usuario = comprueba_identificacion()
-		if usuario:
-			return "El chachi usuario esta por GET"
-		else:
-			f = form_registrar()
-			return plantilla.formulario(form=f,usuario=usuario)
+		return plantilla.inicio()
 	def POST(self):
-		f = form_registrar()
-		if not f.validates():
-			return plantilla.login(form=f,usuario='',mensaje='')
-		#Continuar por aqui, dudas.		
+		return "Hola, estoy en el POST de inicio, no deberia hace nada"			
+
+
+		
 		
 #Clase para registrarse en el sistema.
 
 class registro:
 	def GET(self):
 		f = form_registrar()
-		return plantilla.formulario(form=f)
 		
-
+		return plantilla.registro(f=f.render())
+	
 
 	def POST(self):
 		f = form_registrar()
